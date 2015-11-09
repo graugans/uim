@@ -9,15 +9,17 @@ else
     exit 0
 fi
 
-uim="/usr/bin/uim"
+uim="/usr/sbin/uim"
 uim_args="-f `dirname /sys/$NODE`"
 
 test -x "$uim" || exit 0
 
 case "$1" in
   start)
+    echo -n "Loading btwilink kernel module"
+    /sbin/modprobe -q btwilink
+    echo "."
     echo -n "Starting uim-sysfs daemon"
-    modprobe -q btwilink
     start-stop-daemon --start --quiet --pidfile /var/run/uim.pid --make-pidfile --exec $uim -- $uim_args & 
     echo "."
     ;;
